@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="img-src * filesystem: gap: data: https://ssl.gstatic.com;">
+
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <script src="./js/script.js" defer></script>
+
+
+</head>
+
+<body>
+
+<div class="menu">
+    <center>
+        <button id="menuEnc" class="selected">
+            <p>Encryption</p>
+        </button>
+        <button id="menuDec">
+            <p>Decryption</p>
+        </button>
+
+    </center>
+</div>
+<div class="footer">
+    <center>
+        <p id="status"></p>
+    </center>
+</div>
+<div id="enc">
+    <center>
+        <h1>AES Encryption</h1>
+        <h2>Text input</h2>
+        <textarea id="clearTextInput" placeholder="Type some text here..."></textarea>
+        <h2>Key</h2>
+        <input type="password" id="key" placeholder="Type a password...">
+        <br>
+        <button class="btn" id="encrypt">Encrypt</button>
+        <!---
+              <button id="encrypt">
+                <p>Encrypt</p>
+              </button> -->
+        <br>
+        <h2>Encrypted text</h2>
+        <textarea disabled id="cipherTextOutput"></textarea>
+        <div id="qrkoodi1">
+
+
+          <canvas id="qr"></canvas>
+          <div class="lataa">
+            <button onclick="download_image()"id="downloadqr">
+            Download
+            </button>
+          </div>
+        </div>
+    </center>
+
+<br>
+<br>
+<br>
+
+
+</div>
+<div id="dec">
+    <center>
+        <h1>AES Decryption</h1>
+        <h2>Text input</h2>
+        <textarea id="cipherTextInput" placeholder="Type some text here..."></textarea>
+        <h2>Key</h2>
+        <input type="password" id="key2" placeholder="Type a password...">
+        <br>
+        <button class="btn" id="decrypt">Encrypt</button>
+        <!--
+        <button id="decrypt">
+          <p>Decrypt</p>
+        </button>
+      -->
+        <br>
+        <h2>Decrypted text</h2>
+        <textarea disabled id="clearTextOutput"></textarea>
+
+        <div>
+            <video id="qr-video"></video>
+            <br>
+            <label>
+                <input id="show-scan-region" type="checkbox">
+
+            </label>
+        </div>
+        <div>
+
+            <select id="inversion-mode-select">
+                <option value="original">Scan original (dark QR code on bright background)</option>
+                <option value="invert">Scan with inverted colors (bright QR code on dark background)</option>
+                <option value="both">Scan both</option>
+            </select>
+            <br>
+        </div>
+
+        <span id="cam-has-camera"></span>
+        <br>
+        <div>
+
+            <select id="cam-list">
+                <option value="environment" selected>Environment Facing (default)</option>
+                <option value="user">User Facing</option>
+            </select>
+        </div>
+
+        <span id="cam-has-flash"></span>
+        <div>
+            <button id="flash-toggle">📸 Flash: <span id="flash-state">off</span></button>
+        </div>
+        <br>
+
+        <span id="cam-qr-result"></span>
+        <br>
+
+        <span id="cam-qr-result-timestamp"></span>
+        <br>
+        <button id="start-button">Start</button>
+        <button id="stop-button">Stop</button>
+        <hr>
+
+        <h2>Scan from File:</h2>
+        <input type="file" id="file-selector">
+
+        <span id="file-qr-result"></span>
+
+    </center>
+</div>
+
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js'></script>
+<script  src="./script2.js"></script>
+
+</body>
+
+
+
+<script type="module">
+      import QrScanner from "./qr-scanner.min.js";
+      QrScanner.WORKER_PATH = './qr-scanner-worker.min.js';
+
+      const video = document.getElementById('qr-video');
+      const camHasCamera = document.getElementById('cam-has-camera');
+      const camList = document.getElementById('cam-list');
+      const camHasFlash = document.getElementById('cam-has-flash');
+      const flashToggle = document.getElementById('flash-toggle');
+      const flashState = document.getElementById('flash-state');
+      const camQrResult = document.getElementById('cam-qr-result');
+      const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
+      const fileSelector = document.getElementById('file-selector');
+      const fileQrResult = document.getElementById('file-qr-result');
+
+
+
+      function setResult(label, result) {
+          label.textContent = result;
+          camQrResultTimestamp.textContent = new Date().toString();
+          label.style.color = 'teal';
+          clearTimeout(label.highlightTimeout);
+          label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+      }
+
+      // ####### Web Cam Scanning #######
+
+
+      const scanner = new QrScanner(video, result => setResult(cipherTextInput, result), error =>  {
+          camQrResult.textContent = error;
+          camQrResult.style.color = 'inherit';
+
+      });
+  /* concole log*/ /*
+
+      const scanner = new QrScanner(video, result => console.log('decoded qr code:', result), error =>  {
+          camQrResult.textContent = error;
+          camQrResult.style.color = 'inherit';
+
+      });
+  */
+
+      const updateFlashAvailability = () => {
+          scanner.hasFlash().then(hasFlash => {
+              camHasFlash.textContent = hasFlash;
+              flashToggle.style.display = hasFlash ? 'inline-block' : 'none';
+          });
+      };
+
+      scanner.start().then(() => {
+          updateFlashAvailability();
+          // List cameras after the scanner started to avoid listCamera's stream and the scanner's stream being requested
+          // at the same time which can result in listCamera's unconstrained stream also being offered to the scanner.
+          // Note that we can also start the scanner after listCameras, we just have it this way around in the demo to
+          // start the scanner earlier.
+          QrScanner.listCameras(true).then(cameras => cameras.forEach(camera => {
+              const option = document.createElement('option');
+              option.value = camera.id;
+              option.text = camera.label;
+              camList.add(option);
+          }));
+      });
+
+      QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+
+      // for debugging
+      window.scanner = scanner;
+
+      document.getElementById('show-scan-region').addEventListener('change', (e) => {
+          const input = e.target;
+          const label = input.parentNode;
+          label.parentNode.insertBefore(scanner.$canvas, label.nextSibling);
+          scanner.$canvas.style.display = input.checked ? 'block' : 'none';
+      });
+
+      document.getElementById('inversion-mode-select').addEventListener('change', event => {
+          scanner.setInversionMode(event.target.value);
+      });
+
+      camList.addEventListener('change', event => {
+          scanner.setCamera(event.target.value).then(updateFlashAvailability);
+      });
+
+      flashToggle.addEventListener('click', () => {
+          scanner.toggleFlash().then(() => flashState.textContent = scanner.isFlashOn() ? 'on' : 'off');
+      });
+
+      document.getElementById('start-button').addEventListener('click', () => {
+          scanner.start();
+      });
+
+      document.getElementById('stop-button').addEventListener('click', () => {
+          scanner.stop();
+      });
+
+      // ####### File Scanning #######
+
+      fileSelector.addEventListener('change', event => {
+          const file = fileSelector.files[0];
+          if (!file) {
+              return;
+          }
+          QrScanner.scanImage(file)
+              .then(result => setResult(cipherTextInput, result))
+              .catch(e => setResult(cipherTextInput, e || 'No QR code found.'));
+      });
+
+
+
+
+  </script>
+</html>
