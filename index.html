@@ -248,7 +248,7 @@
         }
         QrScanner.scanImage(file)
             .then(result => setResult(cipherTextInput, result))
-            .catch(e => setResult(cipherTextInput, e || 'No QR code found.'));
+            .catch(e => setResult(cipherTextInput, e || ''));
     });
 
 
