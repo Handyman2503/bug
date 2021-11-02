@@ -53,13 +53,13 @@ var AES = {};
 AES.encrypt = function(clearText, password) {
   //Derive the key
   //Generate a random salt for the key derivation
-  Status.set("Generating the random salt...");
+
   var PBKDF2Salt = SecureRNG.generate(32);
   //Derive the key
-  Status.set("Deriving the key...");
+
   var key = PBKDF2.derive(Hmac_Sha256.hash, 32, password, PBKDF2Salt, 8192, 32);
   var hmacKey = key.splice(16, 16);
-  Status.set("Encrypting...");
+
   //Generate a random salt for encryption
   var AESSalt = SecureRNG.generate(8);
   //Split the key in 4 bytes long words and expand it
@@ -73,9 +73,9 @@ AES.encrypt = function(clearText, password) {
   }
   //Join all the blocks and preappend the salt and the hmac
   var cipherText = Utilities.join(cipherTextSplitted);
-  Status.set("Generating the hmac...");
+
   var hmac = Hmac_Sha256.hash(hmacKey, cipherText);
-  Status.set("Message successfully encrypted.");
+
   return PBKDF2Salt.concat(AESSalt).concat(hmac).concat(cipherText);
 }
 AES.decrypt = function(cipherText, password) {
@@ -84,7 +84,7 @@ AES.decrypt = function(cipherText, password) {
   //Get the random salt for the key derivation
   var PBKDF2Salt = cipherText.splice(0, 32);
   //Derive the key
-  Status.set("Deriving the key...");
+
   var key = PBKDF2.derive(Hmac_Sha256.hash, 32, password, PBKDF2Salt, 8192, 32);
   var hmacKey = key.splice(16, 16);
   //Get the random salt for decryption
@@ -92,7 +92,7 @@ AES.decrypt = function(cipherText, password) {
   //Get the hmac
   var hmac = cipherText.splice(0, 32);
   //Test the hmac
-  Status.set("Checking the hmac...");
+
   var hmac2 = Hmac_Sha256.hash(hmacKey, cipherText);
   for (var i = 0; i < 32; i++) {
     if (hmac[i] != hmac2[i]) {
@@ -100,7 +100,7 @@ AES.decrypt = function(cipherText, password) {
       return [];
     }
   }
-  Status.set("Decrypting...");
+
   //Split the key in 4 bytes long words and expand it
   var keys = AES.expandKey(Utilities.split(key, 4));
   //Split the cipherText in 16 bytes long blocks
@@ -111,7 +111,7 @@ AES.decrypt = function(cipherText, password) {
   }
   //Join all the blocks
   var clearText = Utilities.join(clearTextSplitted);
-  Status.set("Message successfully decrypted.");
+
   return clearText;
 }
 AES.padding = function(input) {
