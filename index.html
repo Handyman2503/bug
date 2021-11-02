@@ -94,12 +94,13 @@
             </label>
         </div>
         <div>
-
+<!--
             <select id="inversion-mode-select">
                 <option value="original">Scan original (dark QR code on bright background)</option>
                 <option value="invert">Scan with inverted colors (bright QR code on dark background)</option>
                 <option value="both">Scan both</option>
             </select>
+          -->
             <br>
         </div>
 
@@ -108,8 +109,8 @@
         <div>
 
             <select id="cam-list">
-                <option value="environment" selected>Environment Facing (default)</option>
-                <option value="user">User Facing</option>
+                <option value="environment" selected>Rear camera</option>
+                <option value="user">Front camera</option>
             </select>
         </div>
 
@@ -119,7 +120,7 @@
         </div>
         <br>
 
-        
+        <span id="cam-qr-result"></span>
         <br>
 
         <span id="cam-qr-result-timestamp"></span>
@@ -165,7 +166,7 @@
 
     function setResult(label, result) {
         label.textContent = result;
-        
+
         label.style.color = 'teal';
         clearTimeout(label.highlightTimeout);
         label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
