@@ -100,7 +100,7 @@
                 <option value="invert">Scan with inverted colors (bright QR code on dark background)</option>
                 <option value="both">Scan both</option>
             </select>
-        
+
             <br>
         </div>
 
@@ -166,7 +166,7 @@
 
     function setResult(label, result) {
         label.textContent = result;
-
+        camQrResultTimestamp.textContent = new Date().toString();
         label.style.color = 'teal';
         clearTimeout(label.highlightTimeout);
         label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
@@ -249,7 +249,7 @@
         }
         QrScanner.scanImage(file)
             .then(result => setResult(cipherTextInput, result))
-            .catch(e => setResult(cipherTextInput, e || ''));
+            .catch(e => setResult(cipherTextInput, e || 'No QR code found.'));
     });
 
 
