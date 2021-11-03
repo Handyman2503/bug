@@ -12,7 +12,7 @@
 
     <script src="./js/script.js" defer></script>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
 <div class="menu">
     <center>
         <button id="menuEnc" class="selected">
-            <p>Toimiiks tää</p>
+            <p>Encryption</p>
         </button>
         <button id="menuDec">
             <p>Decryption</p>
@@ -85,14 +85,25 @@
         <h2>Decrypted text</h2>
         <textarea disabled id="clearTextOutput"></textarea>
 
-        <div>
-            <video id="qr-video" width="75%"></video>
-            <br>
-            <label>
-                <input id="show-scan-region" type="checkbox">
 
-            </label>
-        </div>
+
+
+        <h2>Scan from File:</h2>
+        <input type="file" id="file-selector">
+
+        <span id="file-qr-result"></span>
+
+    <hr>
+            <div class="napit">
+
+
+            <button id="start-button">Start</button>
+            <button id="stop-button">Stop</button>
+            </div>
+
+            <div>
+                <button id="flash-toggle">📸 Flash: <span id="flash-state">off</span></button>
+            </div>
         <div>
 
             <select id="inversion-mode-select">
@@ -104,7 +115,7 @@
             <br>
         </div>
 
-        <span id="cam-has-camera"></span>
+
         <br>
         <div>
 
@@ -114,30 +125,27 @@
             </select>
         </div>
 
-        <span id="cam-has-flash"></span>
+
+
+
         <div>
-            <button id="flash-toggle">📸 Flash: <span id="flash-state">off</span></button>
+            <video id="qr-video" width="75%"></video>
+            <br>
+            <label>
+                <input id="show-scan-region" type="checkbox">
+
+            </label>
         </div>
-        <br>
-
-        <span id="cam-qr-result"></span>
-        <br>
-
-        <span id="cam-qr-result-timestamp"></span>
-        <br>
-        <button id="start-button">Start</button>
-        <button id="stop-button">Stop</button>
-        <hr>
-
-        <h2>Scan from File:</h2>
-        <input type="file" id="file-selector">
-
-        <span id="file-qr-result"></span>
-
     </center>
 </div>
+<br>
 
-
+<span id="cam-qr-result"></span>
+<br>
+<span id="cam-has-flash"></span>
+<span id="cam-qr-result-timestamp"></span>
+<br>
+<span id="cam-has-camera"></span>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js'></script>
@@ -261,21 +269,60 @@
 element.scrollIntoView({ behavior: 'smooth', block: 'end'});
 
 document.getElementById('cipherTextInput').addEventListener('change', event => {
-    element.scrollIntoView(event.target.value);
+    window.scrollTo(0, 0);
+});
+*/
+
+
+  </script>
+
+
+<script>
+
+$("document").ready(function() {
+    setTimeout(function() {
+        $("#stop-button").trigger('click');
+    },3000);
+
 });
 
+
+
+</script>
+
+
+  <script>
+
+
+
+
+
+   var element = document.getElementById("cipherTextInput");
+  element.onchange = function() {
+setTimeout(function(){ window.scrollTo(0, 0); }, 10);
+}
+
+
+/*
+var element = document.getElementById("cipherTextInput");
+element.onchange = function(event) {
+console.log(event.target.value)
+}
+*/
+/*
+var input2 = document.getElementById('cipherTextInput')
+var jutsku = document.getElementById('cam-list')
+
+// This is only called when the input value
+// is changed via the DOM, not when its changed
+// programmatically using input.value
+input2.onchange = (e) => {
+  jutsku.click()
+  console.log(e.target.value)
+
+}
 */
 
   </script>
 
-<!--
-  <script>
-
-   var element = document.getElementById("cipherTextInput");
-  element.onpaste= function() {
-setTimeout(function(){ window.scrollTo(0, 0); }, 100);
-
-  }
-  </script>
--->
 </html>
