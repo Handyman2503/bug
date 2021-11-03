@@ -75,7 +75,7 @@
         <h2>Key</h2>
         <input type="password" id="key2" placeholder="Type a password...">
         <br>
-        <button class="btn" id="decrypt">Encrypt</button>
+        <button class="btn" id="decrypt">Decrypt</button>
         <!--
         <button id="decrypt">
           <p>Decrypt</p>
@@ -254,6 +254,28 @@
 
 
 
+/*
+    var element = document.getElementById('cipherTextInput');
+
+// smooth scroll to element and align it at the bottom
+element.scrollIntoView({ behavior: 'smooth', block: 'end'});
+
+document.getElementById('cipherTextInput').addEventListener('change', event => {
+    element.scrollIntoView(event.target.value);
+});
+
+*/
 
   </script>
+
+
+  <script>
+
+  var element = document.getElementById("cipherTextInput");
+  element.onchange = function() {
+    
+    window.scrollTo(0, 0);
+  }
+  </script>
+
 </html>
