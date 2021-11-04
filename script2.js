@@ -1,4 +1,4 @@
-const input = document.getElementById("clearTextInput");
+const input = document.getElementById("cipherTextOutput");
 const canvas = document.getElementById("qr");
 
 const createQR = v => {
@@ -12,11 +12,15 @@ const createQR = v => {
 
 };
 
+
+  // input.dispatchEvent(new Event('input'));
 const qr = createQR(input.value);
 
-input.addEventListener("input", () => {
-  const qr = createQR(input.value);
+input.addEventListener('click', () => {
+  const qr = createQR(input.value)
+
 });
+
 
 
 function download_image(){

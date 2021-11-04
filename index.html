@@ -9,7 +9,7 @@
     <title>QR Code Generator</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-
+    <link rel="stylesheet" href="./css/style.css">
     <script src="./js/script.js" defer></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -18,7 +18,7 @@
 <body>
 
 <div class="menu">
-    <center>
+    <section>
         <button id="menuEnc" class="selected">
             <p>Encryption</p>
         </button>
@@ -26,15 +26,15 @@
             <p>Decryption</p>
         </button>
 
-    </center>
+    </section>
 </div>
 <div class="footer">
-    <center>
+    <section>
         <p id="status"></p>
-    </center>
+    </section>
 </div>
 <div id="enc">
-    <center>
+    <section>
         <h1>AES Encryption</h1>
         <h2>Text input</h2>
         <textarea id="clearTextInput" placeholder="Type some text here..."></textarea>
@@ -48,7 +48,7 @@
               </button> -->
         <br>
         <h2>Encrypted text</h2>
-        <textarea disabled id="cipherTextOutput"></textarea>
+        <textarea id="cipherTextOutput"></textarea>
         <div id="qrkoodi1">
 
 
@@ -59,7 +59,7 @@
             </button>
           </div>
         </div>
-    </center>
+    </section>
 
 <br>
 <br>
@@ -68,7 +68,7 @@
 
 </div>
 <div id="dec">
-    <center>
+    <section>
         <h1>AES Decryption</h1>
         <h2>Text input</h2>
         <textarea id="cipherTextInput" placeholder="Type some text here..."></textarea>
@@ -84,8 +84,6 @@
         <br>
         <h2>Decrypted text</h2>
         <textarea disabled id="clearTextOutput"></textarea>
-
-
 
 
         <h2>Scan from File:</h2>
@@ -123,8 +121,8 @@
                 <option value="environment" selected>Rear camera</option>
                 <option value="user">Front camera</option>
             </select>
-        </div>
 
+        </div>
 
 
 
@@ -136,7 +134,7 @@
 
             </label>
         </div>
-    </center>
+    </section>
 </div>
 <br>
 
@@ -285,6 +283,44 @@ $("document").ready(function() {
     },3000);
 
 });
+
+
+
+$( "#encrypt" ).on( "click", function() {
+  setTimeout(function() {
+      $("#cipherTextOutput").trigger('click');
+  },20);
+  $("html, body").animate({ scrollTop: 440 }, "fast");
+
+});
+
+// $( "#encrypt" ).on( "click", function() {
+//   setTimeout(function() {
+//   $("html, body").animate({ scrollTop: 550 }, "fast");
+//     return false;
+//   },100);
+//   });
+
+
+
+
+$( "#file-selector" ).on( "click", function() {
+  setTimeout(function() {
+  $("html, body").animate({ scrollTop: 0 }, "fast");
+    return false;
+  },1000);
+  });
+
+
+  $( "#decrypt" ).on( "click", function() {
+    setTimeout(function() {
+    $("html, body").animate({ scrollTop: 550 }, "fast");
+      return false;
+    },100);
+    });
+
+
+
 
 
 
