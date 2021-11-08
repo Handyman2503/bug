@@ -30,4 +30,6 @@ function download_image(){
   link.download = "QrCode.png";
   link.href = image;
   link.click();
+  image.setAttribute('crossOrigin', 'anonymous');
+  image.src = url;
 }
